@@ -178,7 +178,7 @@
   [./Ni_soluble_release_flux_transfer]
     direction = from_multiapp
     postprocessor = Ni_soluble_release_flux
-    variable = Ni_soluble_rate
+    variable = Ni-Soluble-Rate
     type = MultiAppPostprocessorInterpolationTransfer
     multi_app = phase_field_sub_app
   [../]

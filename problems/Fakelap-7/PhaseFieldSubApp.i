@@ -91,7 +91,8 @@
       # we should start with a smooth interface with a width consistent
       # with the kappa parameter supplied for the given interface.
       #
-      function = 'if(x<4.75,1,0)'
+###      function = 'if(x<4.75,1,0)'
+      function = 'if(x>=4.65,if(x<=4.85,1-(5*(x-4.65)),0),1)'
     [../]
   [../]
   [./eta2]
@@ -107,7 +108,8 @@
     family = LAGRANGE
     [./InitialCondition]
       type = FunctionIC
-      function = 'if(x>5,1,0)'
+###      function = 'if(x>5,1,0)'
+      function = 'if(x<4.95,0,if(x<=5.05,5*(x-4.95),1))'
     [../]
   [../]
 []
@@ -415,10 +417,9 @@
 [Postprocessors]
   # TOTALLY FAKE postprocessor to pretend oxygen in is nickel out, with a negative diffusivity
   [./oxygen_fakeout_pp]
-   type = SideFluxIntegral
+   type = PhaseConcentrationGradient
    variable = c
-   diffusivity = Ni-Diffusivity
-   boundary = 'right'
+   phase_of_interest = eta2
   [../]
 
   # The total free enrgy of the simulation cell to observe the energy reduction.
