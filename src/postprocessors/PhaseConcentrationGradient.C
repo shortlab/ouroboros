@@ -14,6 +14,9 @@
 
 #include "PhaseConcentrationGradient.h"
 
+// libMesh includes
+#include "libmesh/quadrature.h"
+
 #include <algorithm>
 #include <limits>
 
