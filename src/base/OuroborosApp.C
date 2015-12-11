@@ -1,6 +1,7 @@
 #include "OuroborosApp.h"
 #include "Moose.h"
 #include "AppFactory.h"
+#include "MooseSyntax.h"
 // #include "ModulesApp.h"
 #include "PhaseFieldApp.h"
 #include "MiscApp.h"
