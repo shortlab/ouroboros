@@ -2,7 +2,10 @@
   type = GeneratedMesh
   dim = 1
   nx = 100
-  xmax = 100
+
+## This should be the total length of the primary circuit in meters
+
+  xmax = 37.1856
 []
 
 [Variables]
@@ -123,16 +126,35 @@
   [./WettedPerimeterIC]
     type = FunctionIC
     variable = wetted_perimeter
-    function = 'if(x<25,100,if(x>50&x<75,1000,1))'
+
+## The order of the numbers goes Core_Length, Core_PW, SG_Start, SG_End, SG_PW, Hot/Cold_Leg_PW
+## All length and wetted perimeters should be in meters
+
+    function = 'if(x<3.6576,1704.34,if(x>9.7536&x<31.0896,354.33,2.3114))'
   [../]
 
   [./wall_temp_IC]
     type = FunctionIC
     variable = wall_temp
-    function = 'if(x<25,600+(25*sin(x*3.14159/25)),if(x>50&x<75,500,550))'
+
+## Here we are assuming a simple sinusoidal cladding temperature profile, with a linear increase superimposed
+## for the core temperature. We also assume that the hot & cold legs have constant temperature, while
+## the steam generator has a linear heat decrease along its length.
+
+## Cold leg temperature is assumed at the inlet (292C, 565K, 558F)
+## Hot leg temperature is assumed at the outlet (326C, 599K, 619F)
+## Values taken from Westinghouse 4-loop PWR, at http://www4.ncsu.edu/~doster/NE405/Manuals/PWR_Manual.pdf
+
+## The order of the numbers goes Core_Length, Core_temp_func, SG_Start, SG_End, SG_func, Cold_Leg_start, Cold_leg_temp, Hot_leg_temp
+## All temperatures are in Kelvin
+
+    function = 'if(x<3.6576,565+(25*sin(x*3.14159/3.6576))+34*(x/3.6576),if(x>9.7536&x<31.0896,(599-34*((x-9.7536)/21.336)),if(x>=31.0896,565,599)))'
   [../]
 
 []
+
+## *** NOTE SOMEWHERE: The reactor coolant volume is about 138 cubic meters in the vessel.
+## What else in the primary system?
 
 [BCs]
   [./Periodic]
@@ -165,9 +187,18 @@
 []
 
 [MultiApps]
-  [./phase_field_sub_app]
-#    positions = '0 0 0   5 0 0   10 0 0   15 0 0   20 0 0   25 0 0   30 0 0   35 0 0   40 0 0   45 0 0   50 0 0   55 0 0   60 0 0   65 0 0   70 0 0   75 0 0   80 0 0   85 0 0   90 0 0   95 0 0   100 0 0'
-    positions = '60 0 0'
+
+active = 'diffusion_sub_app'
+
+  [./diffusion_sub_app]
+    positions = '25 0 0 28 0 0'
+    type = TransientMultiApp
+    input_files = 'Simple-Diffusion-A690-SubApp.i'
+    app_type = OuroborosApp
+  [../]
+
+  [./PhaseField_sub_app]
+    positions = '28 0 0'
     type = TransientMultiApp
     input_files = 'PhaseFieldSubApp.i'
     app_type = OuroborosApp
@@ -177,10 +208,18 @@
 [Transfers]
   [./Ni_soluble_release_flux_transfer]
     direction = from_multiapp
-    postprocessor = Ni_soluble_release_flux
-    variable = Ni_soluble_rate
+    postprocessor = Ni-Dissolution-Rate
+    variable = Ni_Soluble_Rate
     type = MultiAppPostprocessorInterpolationTransfer
-    multi_app = phase_field_sub_app
+    multi_app = diffusion_sub_app
+  [../]
+
+  [./temperature_transfer]
+    source_variable = wall_temp
+    direction = to_multiapp
+    postprocessor = Temperature_Transferred
+    type = MultiAppVariableValueSamplePostprocessorTransfer
+    multi_app = diffusion_sub_app
   [../]
 []
 
