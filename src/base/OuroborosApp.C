@@ -7,6 +7,8 @@
 #include "MiscApp.h"
 
 #include "ReactorHeatSource.h"
+#include "OxideThickness.h"
+#include "MatPropDiffusion.h"
 #include "CRUD_ODE.h"
 #include "PhaseConcentrationGradient.h"
 
@@ -54,6 +56,8 @@ void
 OuroborosApp::registerObjects(Factory & factory)
 {
   registerKernel(ReactorHeatSource);
+  registerKernel(MatPropDiffusion);
+  registerAuxKernel(OxideThickness);
   registerScalarKernel(CRUD_ODE);
   registerPostprocessor(PhaseConcentrationGradient);
 }

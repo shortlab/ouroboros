@@ -49,5 +49,5 @@ CRUD_ODE::computeValue()
   Real _erosion = _tke_times_crud * _wetted_perimeter * _erosion_fraction;
   Real _deposition = _u_old[_i] * _boiling_rate * _deposition_fraction;
 
-  return _u_old[_i] + _dt * (_release + _erosion - _deposition);
+  return _u_old[_i] + _dt * (_release);
 }

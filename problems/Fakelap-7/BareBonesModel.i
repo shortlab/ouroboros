@@ -38,11 +38,6 @@
     family = LAGRANGE
   [../]
 
-  [./chromia_thickness]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-
   [./tke]
     order = FIRST
     family = LAGRANGE
@@ -58,6 +53,59 @@
   [./Ni-Soluble]
     order = FIRST
     family = SCALAR
+  [../]
+
+  [./Oxide-Thickness]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 1.0
+  [../]
+
+  [./Thickness-Prefactor]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 1
+  [../]
+
+  [./Thickness-Power]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.5
+  [../]
+[]
+
+[Functions]
+  [./Thickness-Prefactor-Function]
+    type = ParsedFunction
+
+## The order of the numbers goes Core_Length, Core_PW, SG_Start, SG_End, SG_PW, Hot/Cold_Leg_PW
+## Lengths are in meters, prefactors are in nm/sec, powers are unitless
+
+    value = 'if(x<3.6576,0,if(x>9.7536&x<31.0896,0.005137,0.003683))'
+  [../]
+
+  [./Thickness-Power-Function]
+    type = ParsedFunction
+
+## The order of the numbers goes Core_Length, Core_PW, SG_Start, SG_End, SG_PW, Hot/Cold_Leg_PW
+## Lengths are in meters, prefactors are in nm/sec, powers are unitless
+
+    value = 'if(x<3.6576,0,if(x>9.7536&x<31.0896,0.153692,0.502595))'
+  [../]
+[]
+
+
+[AuxKernels]
+  [./Thickness-Prefactor-Aux]
+    type = FunctionAux
+    variable = Thickness-Prefactor
+    function = Thickness-Prefactor-Function
+  [../]
+
+  [./Thickness-Power-Aux]
+    type = FunctionAux
+    variable = Thickness-Power
+    function = Thickness-Power-Function
   [../]
 []
 
@@ -84,6 +132,21 @@
     variable = temp
     x = 2.
     y = 0.
+  [../]
+[]
+
+[AuxKernels]
+  [./Ni_Soluble_Aux]
+    type = FunctionAux
+    variable = Ni-Soluble-Rate
+    function = '0'
+  [../]
+
+  [./Oxide_Thickness]
+    type = OxideThickness
+    variable = Oxide-Thickness
+    prefactor = Thickness-Prefactor
+    power = Thickness-Power
   [../]
 []
 
@@ -154,17 +217,6 @@
 
     function = 'if(x<3.6576,565+(25*sin(x*3.14159/3.6576))+34*(x/3.6576),if(x>9.7536&x<31.0896,(599-34*((x-9.7536)/21.336)),if(x>=31.0896,565,599)))'
   [../]
-
-  [./ChromiaThicknessIC]
-    type = FunctionIC
-    variable = chromia_thickness
-
-## The order of the numbers goes Core_Length, Core_PW, SG_Start, SG_End, SG_PW, Hot/Cold_Leg_PW
-## All length and wetted perimeters should be in meters
-
-    function = '1'
-  [../]
-
 []
 
 ## *** NOTE SOMEWHERE: The reactor coolant volume is about 138 cubic meters in the vessel.
@@ -199,49 +251,3 @@
   print_perf_log = true
   csv = true
 []
-
-[MultiApps]
-
-active = 'diffusion_sub_app'
-
-  [./diffusion_sub_app]
-    positions = '25 0 0 28 0 0'
-    type = TransientMultiApp
-    input_files = 'Simple-Diffusion-A690-SubApp.i'
-    app_type = OuroborosApp
-  [../]
-
-  [./PhaseField_sub_app]
-    positions = '28 0 0'
-    type = TransientMultiApp
-    input_files = 'PhaseFieldSubApp.i'
-    app_type = OuroborosApp
-  [../]
-[]
-
-[Transfers]
-  [./Ni_soluble_release_flux_transfer]
-    direction = from_multiapp
-    postprocessor = Ni-Dissolution-Rate
-    variable = Ni-Soluble-Rate
-    type = MultiAppPostprocessorInterpolationTransfer
-    multi_app = diffusion_sub_app
-  [../]
-
-  [./temperature_transfer]
-    source_variable = wall_temp
-    direction = to_multiapp
-    postprocessor = Temperature_Transferred
-    type = MultiAppVariableValueSamplePostprocessorTransfer
-    multi_app = diffusion_sub_app
-  [../]
-
-  [./thickness_transfer]
-    source_variable = chromia_thickness
-    direction = to_multiapp
-    postprocessor = Thickness_Transferred
-    type = MultiAppVariableValueSamplePostprocessorTransfer
-    multi_app = diffusion_sub_app
-  [../]
-[]
-

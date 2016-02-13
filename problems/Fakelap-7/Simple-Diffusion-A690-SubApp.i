@@ -9,9 +9,10 @@
   nx = 1000
   ny = 1
   xmin = 0
-  xmax = 10
-  ymin = -0.1
-  ymax = 0.1
+  xmax = 1
+  ymin = -1
+  ymax = 1
+  displacements = 'x_disp y_disp'
   elem_type = QUAD4
 []
 
@@ -19,7 +20,21 @@
   [./Ni]
     order = FIRST
     family = LAGRANGE
-    initial_condition = 0.005
+    initial_condition = 0
+  [../]
+[]
+
+[AuxVariables]
+  [./x_disp]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
+  [../]
+
+  [./y_disp]
+    order = FIRST
+    family = LAGRANGE
+    initial_condition = 0.0
   [../]
 []
 
@@ -27,8 +42,18 @@
   active = 'diff-Ni'
 
   [./diff-Ni]
-    type = Diffusion
+    type = MatPropDiffusion
     variable = Ni
+    diffusivity = Ni-Diffusivity
+    use_displaced_mesh = true
+  [../]
+[]
+
+[AuxKernels]
+  [./x_disp_aux]
+    type = FunctionAux
+    variable = x_disp
+    function = x_disp_func
   [../]
 []
 
@@ -38,9 +63,16 @@
 
   [./Ni_diff_func]
     type = ParsedFunction
-    value = '1e-20*exp(-1/0.0000861733*T)'
+    value = '(1e-10)*exp(-1/0.0000861733*T)'
     vals = Temperature_Transferred
     vars = T    
+  [../]
+
+  [./x_disp_func]
+    type = ParsedFunction
+    value = 'x*thick'
+    vals = Thickness_Transferred
+    vars = thick
   [../]
 []
 
@@ -65,10 +97,10 @@
   [../]
 
   [./fluid-Ni]
-    type = NeumannBC
+    type = DirichletBC
     variable = Ni
     boundary = 'right'
-    value = 0.1
+    value = 0
   [../]
 []
 
@@ -85,6 +117,10 @@
   [../]
 
   [./Temperature_Transferred]
+    type = Receiver
+  [../]
+
+  [./Thickness_Transferred]
     type = Receiver
   [../]
 []
@@ -115,12 +151,8 @@
   nl_abs_tol = 1.0e-6
 
   start_time = 0.0
+  dt = 0.1
   end_time   = 86400.0
-
-  [./TimeStepper]
-    type = SolutionTimeAdaptiveDT
-    dt = 0.001
-  [../]
 []
 
 [Outputs]
