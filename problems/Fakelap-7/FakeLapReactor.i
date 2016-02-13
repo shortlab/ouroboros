@@ -208,8 +208,13 @@ active = 'diffusion_sub_app'
 [Transfers]
   [./Ni_soluble_release_flux_transfer]
     direction = from_multiapp
+<<<<<<< HEAD
     postprocessor = Ni-Dissolution-Rate
     variable = Ni_Soluble_Rate
+=======
+    postprocessor = Ni_soluble_release_flux
+    variable = Ni-Soluble-Rate
+>>>>>>> 141f2c3a49d20966298a30240cb2f61301572e1d
     type = MultiAppPostprocessorInterpolationTransfer
     multi_app = diffusion_sub_app
   [../]

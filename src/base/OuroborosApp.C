@@ -1,10 +1,14 @@
 #include "OuroborosApp.h"
 #include "Moose.h"
 #include "AppFactory.h"
-#include "ModulesApp.h"
+#include "MooseSyntax.h"
+// #include "ModulesApp.h"
+#include "PhaseFieldApp.h"
+#include "MiscApp.h"
 
 #include "ReactorHeatSource.h"
 #include "CRUD_ODE.h"
+#include "PhaseConcentrationGradient.h"
 
 template<>
 InputParameters validParams<OuroborosApp>()
@@ -20,11 +24,15 @@ OuroborosApp::OuroborosApp(InputParameters parameters) :
     MooseApp(parameters)
 {
   Moose::registerObjects(_factory);
-  ModulesApp::registerObjects(_factory);
+//  ModulesApp::registerObjects(_factory);
+  PhaseFieldApp::registerObjects(_factory);
+  MiscApp::registerObjects(_factory);
   OuroborosApp::registerObjects(_factory);
 
   Moose::associateSyntax(_syntax, _action_factory);
-  ModulesApp::associateSyntax(_syntax, _action_factory);
+//  ModulesApp::associateSyntax(_syntax, _action_factory);
+  PhaseFieldApp::associateSyntax(_syntax, _action_factory);
+  MiscApp::associateSyntax(_syntax, _action_factory);
   OuroborosApp::associateSyntax(_syntax, _action_factory);
 }
 
@@ -47,6 +55,7 @@ OuroborosApp::registerObjects(Factory & factory)
 {
   registerKernel(ReactorHeatSource);
   registerScalarKernel(CRUD_ODE);
+  registerPostprocessor(PhaseConcentrationGradient);
 }
 
 // External entry point for dynamic syntax association
