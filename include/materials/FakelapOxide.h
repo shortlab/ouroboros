@@ -12,37 +12,49 @@
 /*            See COPYRIGHT for full restrictions               */
 /****************************************************************/
 
-#ifndef OXIDETHICKNESS_H
-#define OXIDETHICKNESS_H
+#ifndef FAKELAPOXIDE_H
+#define FAKELAPOXIDE_H
 
-#include "AuxKernel.h"
+#include "Material.h"
 
 //Forward Declarations
-class OxideThickness;
+class FakelapOxide;
 
-/**
- * validParams returns the parameters that this AuxKernel accepts / needs
- * The actual body of the function MUST be in the .C file.
- */
 template<>
-InputParameters validParams<OxideThickness>();
+InputParameters validParams<FakelapOxide>();
 
-class OxideThickness : public AuxKernel
+class FakelapOxide : public Material
 {
 public:
-
-  OxideThickness(const InputParameters & parameters);
+  FakelapOxide(const InputParameters & parameters);
 
 protected:
-  virtual Real computeValue();
+//  virtual void initQpStatefulProperties();
+  virtual void computeQpProperties();
+
+private:
 
   /**
-   * This MooseArray will hold the reference we need to our
-   * material property from the Material class
+   * These variables will hold key values from the
+   * input file for material property calculation.
    */
 
-  VariableValue & _power;
-  VariableValue & _prefactor;
+  // Coupled variables used in calculation (TBD)
+  VariableValue & _T;
+  VariableValue & _D_0_Ni;
+  VariableValue & _E_A_Ni;
+  VariableValue & _D_0_Fe;
+  VariableValue & _E_A_Fe;
 
+  /**
+   * This is the member reference that will hold the
+   * computed values from this material class.
+   */
+
+  // Diffusivities of radiation defects
+  MaterialProperty<Real> & _Ni_diffusivity_matprop;
+  MaterialProperty<Real> & _Fe_diffusivity_matprop;
+  MaterialProperty<Real> & _rho_h2o;
 };
-#endif //OXIDETHICKNESS_H
+
+#endif //FAKELAPOXIDE_H

@@ -12,28 +12,33 @@
 /*            See COPYRIGHT for full restrictions               */
 /****************************************************************/
 
-#include "OxideThickness.h"
+#ifndef SOLUBLE_ODE_H
+#define SOLUBLE_ODE_H
+
+#include "AuxScalarKernel.h"
+
+//Forward Declarations
+class Soluble_ODE;
 
 template<>
-InputParameters validParams<OxideThickness>()
+InputParameters validParams<Soluble_ODE>();
+
+/**
+ * Explicit solve of ODE:
+ *
+ * dy/dt = -\lambda y  (using forward Euler)
+ */
+class Soluble_ODE : public AuxScalarKernel
 {
-  InputParameters params = validParams<AuxKernel>();
-  params.addRequiredCoupledVar("prefactor", "The value of the oxide thickness prefactor for growth");
-  params.addRequiredCoupledVar("power", "The value of the oxide thickness power for growth");
-  return params;
-}
+public:
+  Soluble_ODE(const InputParameters & parameters);
+  virtual ~Soluble_ODE();
 
+protected:
+  virtual Real computeValue();
 
-OxideThickness::OxideThickness(const InputParameters & parameters)
-  :AuxKernel(parameters),
-   _power(coupledValue("power")),
-   _prefactor(coupledValue("prefactor"))
-{}
+  const PostprocessorValue & _product_release_rate;
+  const PostprocessorValue & _wetted_perimeter;
+};
 
-Real
-OxideThickness::computeValue()
-{
-
-  Real thick = _prefactor[_qp] * std::pow(_t,_power[_qp]);
-  return thick;
-}
+#endif /* SOLUBLE_ODE_H */

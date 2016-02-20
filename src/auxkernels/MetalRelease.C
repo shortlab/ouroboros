@@ -12,28 +12,34 @@
 /*            See COPYRIGHT for full restrictions               */
 /****************************************************************/
 
-#include "OxideThickness.h"
+#include "MetalRelease.h"
 
 template<>
-InputParameters validParams<OxideThickness>()
+InputParameters validParams<MetalRelease>()
 {
   InputParameters params = validParams<AuxKernel>();
-  params.addRequiredCoupledVar("prefactor", "The value of the oxide thickness prefactor for growth");
-  params.addRequiredCoupledVar("power", "The value of the oxide thickness power for growth");
+  params.addRequiredCoupledVar("diffusivity", "The value of the diffusivity for this oxide and metal");
+  params.addRequiredCoupledVar("concentration", "The value of this metal's concentration");
+  params.addRequiredCoupledVar("thickness", "The value of the oxide thickness");
+  params.addRequiredCoupledVar("perimeter", "The value of the wetted perimeter");
+  params.addRequiredCoupledVar("number_density", "The value of the number density");
   return params;
 }
 
 
-OxideThickness::OxideThickness(const InputParameters & parameters)
+MetalRelease::MetalRelease(const InputParameters & parameters)
   :AuxKernel(parameters),
-   _power(coupledValue("power")),
-   _prefactor(coupledValue("prefactor"))
+   _diffusivity(coupledValue("diffusivity")),
+   _concentration(coupledValue("concentration")),
+   _thickness(coupledValue("thickness")),
+   _perimeter(coupledValue("perimeter")),
+   _ND(coupledValue("number_density"))
 {}
 
 Real
-OxideThickness::computeValue()
+MetalRelease::computeValue()
 {
 
-  Real thick = _prefactor[_qp] * std::pow(_t,_power[_qp]);
-  return thick;
+  Real release = (_diffusivity[_qp] * _concentration[_qp] * _perimeter[_qp] * _ND[_qp]) / (_thickness[_qp] * 6.02e23);
+  return release;
 }

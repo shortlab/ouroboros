@@ -8,8 +8,11 @@
 
 #include "ReactorHeatSource.h"
 #include "OxideThickness.h"
+#include "MetalRelease.h"
 #include "MatPropDiffusion.h"
+#include "FakelapOxide.h"
 #include "CRUD_ODE.h"
+#include "Soluble_ODE.h"
 #include "PhaseConcentrationGradient.h"
 
 template<>
@@ -58,8 +61,14 @@ OuroborosApp::registerObjects(Factory & factory)
   registerKernel(ReactorHeatSource);
   registerKernel(MatPropDiffusion);
   registerAuxKernel(OxideThickness);
+  registerAuxKernel(MetalRelease);
   registerScalarKernel(CRUD_ODE);
+  registerScalarKernel(Soluble_ODE);
   registerPostprocessor(PhaseConcentrationGradient);
+
+  // Register materials classes
+  registerMaterial(FakelapOxide);
+
 }
 
 // External entry point for dynamic syntax association

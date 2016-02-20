@@ -12,28 +12,40 @@
 /*            See COPYRIGHT for full restrictions               */
 /****************************************************************/
 
-#include "OxideThickness.h"
+#ifndef METALRELEASE_H
+#define METALRELEASE_H
 
+#include "AuxKernel.h"
+
+//Forward Declarations
+class MetalRelease;
+
+/**
+ * validParams returns the parameters that this AuxKernel accepts / needs
+ * The actual body of the function MUST be in the .C file.
+ */
 template<>
-InputParameters validParams<OxideThickness>()
+InputParameters validParams<MetalRelease>();
+
+class MetalRelease : public AuxKernel
 {
-  InputParameters params = validParams<AuxKernel>();
-  params.addRequiredCoupledVar("prefactor", "The value of the oxide thickness prefactor for growth");
-  params.addRequiredCoupledVar("power", "The value of the oxide thickness power for growth");
-  return params;
-}
+public:
 
+  MetalRelease(const InputParameters & parameters);
 
-OxideThickness::OxideThickness(const InputParameters & parameters)
-  :AuxKernel(parameters),
-   _power(coupledValue("power")),
-   _prefactor(coupledValue("prefactor"))
-{}
+protected:
+  virtual Real computeValue();
 
-Real
-OxideThickness::computeValue()
-{
+  /**
+   * This MooseArray will hold the reference we need to our
+   * material property from the Material class
+   */
 
-  Real thick = _prefactor[_qp] * std::pow(_t,_power[_qp]);
-  return thick;
-}
+  VariableValue & _diffusivity;
+  VariableValue & _concentration;
+  VariableValue & _thickness;
+  VariableValue & _perimeter;
+  VariableValue & _ND;
+
+};
+#endif //METALRELEASE_H
