@@ -158,3 +158,4 @@ peacock_*.e
 *.cpa-*
 *.cpr-*
 
+include/base/OuroborosRevision.h
