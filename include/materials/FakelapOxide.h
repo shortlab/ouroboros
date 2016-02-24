@@ -40,11 +40,11 @@ private:
    */
 
   // Coupled variables used in calculation (TBD)
-  VariableValue & _T;
-  VariableValue & _D_0_Ni;
-  VariableValue & _E_A_Ni;
-  VariableValue & _D_0_Fe;
-  VariableValue & _E_A_Fe;
+  const VariableValue & _T;
+  const VariableValue & _D_0_Ni;
+  const VariableValue & _E_A_Ni;
+  const VariableValue & _D_0_Fe;
+  const VariableValue & _E_A_Fe;
 
   /**
    * This is the member reference that will hold the

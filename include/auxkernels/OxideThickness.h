@@ -41,8 +41,8 @@ protected:
    * material property from the Material class
    */
 
-  VariableValue & _power;
-  VariableValue & _prefactor;
+  const VariableValue & _power;
+  const VariableValue & _prefactor;
 
 };
 #endif //OXIDETHICKNESS_H

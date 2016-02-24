@@ -46,7 +46,7 @@ protected:
   virtual void computeQpValue();
 
   /// Get the phase in which we want the concentration gradient
-  VariableValue & _phase_of_interest;
+  const VariableValue & _phase_of_interest;
   Real _value;
 
   /// Get the actual variable whose concentration we want
