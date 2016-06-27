@@ -36,8 +36,8 @@ protected:
 
 private:
 
-  VariableValue & _wetted_perimeter;
-  VariableValue & _wall_temp;
+  const VariableValue & _wetted_perimeter;
+  const VariableValue & _wall_temp;
 };
 
 #endif //REACTORHEATSOURCE_H

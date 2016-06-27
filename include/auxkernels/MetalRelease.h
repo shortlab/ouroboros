@@ -41,11 +41,11 @@ protected:
    * material property from the Material class
    */
 
-  VariableValue & _diffusivity;
-  VariableValue & _concentration;
-  VariableValue & _thickness;
-  VariableValue & _perimeter;
-  VariableValue & _ND;
+  const VariableValue & _diffusivity;
+  const VariableValue & _concentration;
+  const VariableValue & _thickness;
+  const VariableValue & _perimeter;
+  const VariableValue & _ND;
 
 };
 #endif //METALRELEASE_H
