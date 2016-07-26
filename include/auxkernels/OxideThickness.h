@@ -41,6 +41,7 @@ protected:
    * material property from the Material class
    */
 
+  const VariableValue & _offset;
   const VariableValue & _power;
   const VariableValue & _prefactor;
 
