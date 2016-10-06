@@ -8,6 +8,7 @@
 
 #include "ReactorHeatSource.h"
 #include "OxideThickness.h"
+#include "OxideThicknessMAI.h"
 #include "MetalRelease.h"
 #include "Convection.h"
 #include "MatPropDiffusion.h"
@@ -63,6 +64,7 @@ OuroborosApp::registerObjects(Factory & factory)
   registerKernel(MatPropDiffusion);
   registerKernel(Convection);
   registerAuxKernel(OxideThickness);
+  registerAuxKernel(OxideThicknessMAI);
   registerAuxKernel(MetalRelease);
   registerScalarKernel(CRUD_ODE);
   registerScalarKernel(Soluble_ODE);

@@ -286,6 +286,7 @@
   /home/hereiam/projects/moose/framework/include/base/ZeroInterface.h \
   /home/hereiam/projects/ouroboros/include/auxkernels/OxideThickness.h \
   /home/hereiam/projects/moose/framework/include/auxkernels/AuxKernel.h \
+  /home/hereiam/projects/ouroboros/include/auxkernels/OxideThicknessMAI.h \
   /home/hereiam/projects/ouroboros/include/auxkernels/MetalRelease.h \
   /home/hereiam/projects/ouroboros/include/kernels/Convection.h \
   /home/hereiam/projects/ouroboros/include/kernels/MatPropDiffusion.h \
@@ -871,6 +872,8 @@
 /home/hereiam/projects/ouroboros/include/auxkernels/OxideThickness.h:
 
 /home/hereiam/projects/moose/framework/include/auxkernels/AuxKernel.h:
+
+/home/hereiam/projects/ouroboros/include/auxkernels/OxideThicknessMAI.h:
 
 /home/hereiam/projects/ouroboros/include/auxkernels/MetalRelease.h:
 

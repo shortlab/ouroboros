@@ -1,3 +1,37 @@
+## Units are in meters.
+
+## Core End = 3.66
+## Hot Leg End = 9.76
+## SG End = 31.1
+## Cold Leg End = 37.2
+
+## These are TOTALS: You have to multiply HL, SG, CL by number of trains.
+## Units are in meters.
+
+## Core P_w = 1704.34
+## Hot Leg P_w = 2.31
+## SG P_w = 1110
+## Cold Leg P_w = 2.31
+
+## Oxide parameters, in meters
+
+## D_0 units are in m^2/sec
+## E_A units are in eV
+
+## Spinel data directly from MD, scaled to ???
+## Cr2O3 data from Sabioni papers on Ni & Fe diffusion through Cr2O3 polycrytsals
+
+## Cr2O3 D_0 Ni = 
+## Cr2O3 E_A Ni = 
+## Spinel D_0 Ni = 1.59e-8
+## Spinel E_A Ni = 1.84
+
+## Cr2O3 D_0 Fe = 
+## Cr2O3 E_A Fe = 1.87
+## Spinel D_0 Fe = 6.14e-8
+## Spinel E_A Fe = 1.87
+
+
 [Mesh]
   type = GeneratedMesh
   dim = 2
@@ -79,6 +113,12 @@
     initial_condition = 1
   [../]
 
+  [./Thickness-Offset]
+    order = CONSTANT
+    family = MONOMIAL
+    initial_condition = 1
+  [../]
+
   [./Thickness-Power]
     order = CONSTANT
     family = MONOMIAL
@@ -147,40 +187,45 @@
 ## The order of the numbers goes Core_Length, Core_PW, SG_Start, SG_End, SG_PW, Hot/Cold_Leg_PW
 ## Lengths are in meters, prefactors are in m/sec, powers are unitless
 
-    value = 'if(x<3.66,1,if(x>9.76&x<31.1,5.25e-9,2.16e-10))'
+    value = 'if(x<3.66,2.16e-10,if(x>9.76&x<31.1,5.25e-9,2.16e-10))'
   [../]
 
   [./Thickness-Power-Function]
     type = ParsedFunction
-    value = 'if(x<3.66,0,if(x>9.76&x<31.1,0.154,0.503))'
+    value = 'if(x<3.66,0.503,if(x>9.76&x<31.1,0.154,0.503))'
+  [../]
+
+  [./Thickness-Offset-Function]
+    type = ParsedFunction
+    value = 'if(x<3.66,10e-9,if(x>9.76&x<31.1,10e-9,10e-9))'
   [../]
 
   [./Oxide-Prefactor-Function-Ni]
     type = ParsedFunction
 
 ## The order of the numbers goes Core_Length, Core_PW, SG_Start, SG_End, SG_PW, Hot/Cold_Leg_PW
-## Lengths are in meters, prefactors are in mm^2/sec, powers are unitless
+## Lengths are in meters, prefactors are in m^2/sec, powers are unitless
 
-    value = 'if(x<3.66,1,if(x>9.76&x<31.1,1.4e-2,1.59e-3))'
+    value = 'if(x<3.66,1.59e-8,if(x>9.76&x<31.1,1.59e-8,1.59e-8))'
   [../]
 
   [./Oxide-Activation-Energy-Function-Ni]
     type = ParsedFunction
-    value = 'if(x<3.66,0,if(x>9.76&x<31.1,2.16,1.84))'
+    value = 'if(x<3.66,1.84,if(x>9.76&x<31.1,1.84,1.84))'
   [../]
 
   [./Oxide-Prefactor-Function-Fe]
     type = ParsedFunction
 
 ## The order of the numbers goes Core_Length, Core_PW, SG_Start, SG_End, SG_PW, Hot/Cold_Leg_PW
-## Lengths are in meters, prefactors are in mm^2/sec, powers are unitless
+## Lengths are in meters, prefactors are in m^2/sec, powers are unitless
 
-    value = 'if(x<3.66,1e-10,if(x>9.76&x<31.1,4.4e-2,6.14e-3))'
+    value = 'if(x<3.66,6.14e-8,if(x>9.76&x<31.1,6.14e-8,6.14e-8))'
   [../]
 
   [./Oxide-Activation-Energy-Function-Fe]
     type = ParsedFunction
-    value = 'if(x<3.66,1e-10,if(x>9.76&x<31.1,2.44,1.98))'
+    value = 'if(x<3.66,1.87,if(x>9.76&x<31.1,1.87,1.87))'
   [../]
 
   [./Metal-Function-Ni]
@@ -188,17 +233,17 @@
 
 ## The order of the numbers goes Core_Length, Core_metal, SG_Start, SG_End, SG_metal, Hot/Cold_Leg_metal
 
-    value = 'if(x<3.66,0,if(x>9.76&x<31.1,0.6,0.1))'
+    value = 'if(x<3.66,0.1,if(x>9.76&x<31.1,0.6,0.1))'
   [../]
 
   [./Metal-Function-Fe]
     type = ParsedFunction
-    value = 'if(x<3.66,0,if(x>9.76&x<31.1,0.1,0.7))'
+    value = 'if(x<3.66,0.7,if(x>9.76&x<31.1,0.1,0.7))'
   [../]
 
   [./ND-Function]
     type = ParsedFunction
-    value = 'if(x<3.66,0.1,if(x>9.76&x<31.1,9.14e28,8.49e28))'
+    value = 'if(x<3.66,8.49e28,if(x>9.76&x<31.1,9.14e28,8.49e28))'
   [../]
 []
 
@@ -214,6 +259,12 @@
     type = FunctionAux
     variable = Thickness-Power
     function = Thickness-Power-Function
+  [../]
+
+  [./Thickness-Offset-Aux]
+    type = FunctionAux
+    variable = Thickness-Offset
+    function = Thickness-Offset-Function
   [../]
 
   [./Oxide-Prefactor-Aux-Ni]
@@ -295,6 +346,7 @@
     variable = Oxide-Thickness
     prefactor = Thickness-Prefactor
     power = Thickness-Power
+    offset = Thickness-Offset
   [../]
 []
 

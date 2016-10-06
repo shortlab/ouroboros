@@ -23,12 +23,12 @@
 
 ## Cr2O3 D_0 Ni = 
 ## Cr2O3 E_A Ni = 
-## Spinel D_0 Ni = 1.59e-9
+## Spinel D_0 Ni = 6.14e-9
 ## Spinel E_A Ni = 1.84
 
 ## Cr2O3 D_0 Fe = 
 ## Cr2O3 E_A Fe = 1.87
-## Spinel D_0 Fe = 6.14e-9
+## Spinel D_0 Fe = 1.59e-9
 ## Spinel E_A Fe = 1.87
 
 [Mesh]
