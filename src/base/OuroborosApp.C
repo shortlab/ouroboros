@@ -3,7 +3,7 @@
 #include "AppFactory.h"
 #include "MooseSyntax.h"
 // #include "ModulesApp.h"
-//#include "PhaseFieldApp.h"
+#include "PhaseFieldApp.h"
 #include "MiscApp.h"
 
 #include "ReactorHeatSource.h"
@@ -32,13 +32,13 @@ OuroborosApp::OuroborosApp(InputParameters parameters) :
 {
   Moose::registerObjects(_factory);
 //  ModulesApp::registerObjects(_factory);
-//  PhaseFieldApp::registerObjects(_factory);
+  PhaseFieldApp::registerObjects(_factory);
   MiscApp::registerObjects(_factory);
   OuroborosApp::registerObjects(_factory);
 
   Moose::associateSyntax(_syntax, _action_factory);
 //  ModulesApp::associateSyntax(_syntax, _action_factory);
-  // PhaseFieldApp::associateSyntax(_syntax, _action_factory);
+  PhaseFieldApp::associateSyntax(_syntax, _action_factory);
   MiscApp::associateSyntax(_syntax, _action_factory);
   OuroborosApp::associateSyntax(_syntax, _action_factory);
 }
