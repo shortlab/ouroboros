@@ -21,10 +21,10 @@ InputParameters validParams<FakelapOxide>()
 
   // Many material properties scale with temperature (to be implemented later)
   params.addRequiredCoupledVar("temperature", "Temperature of the current location)");
-  params.addRequiredCoupledVar("prefactor-Ni", "Ni Diffusivity prefactor, which partially determines oxide phase)");
-  params.addRequiredCoupledVar("activation_energy-Ni", "Ni Activation energy, which partially determines oxide phase");
-  params.addRequiredCoupledVar("prefactor-Fe", "Fe Diffusivity prefactor, which partially determines oxide phase)");
-  params.addRequiredCoupledVar("activation_energy-Fe", "Fe Activation energy, which partially determines oxide phase");
+  params.addRequiredCoupledVar("prefactor_Ni", "Ni Diffusivity prefactor, which partially determines oxide phase)");
+  params.addRequiredCoupledVar("activation_energy_Ni", "Ni Activation energy, which partially determines oxide phase");
+  params.addRequiredCoupledVar("prefactor_Fe", "Fe Diffusivity prefactor, which partially determines oxide phase)");
+  params.addRequiredCoupledVar("activation_energy_Fe", "Fe Activation energy, which partially determines oxide phase");
 
   return params;
 }
@@ -34,14 +34,14 @@ FakelapOxide::FakelapOxide(const InputParameters & parameters)
 
      // Bring in any coupled variables needed to calculate material properties
      _T(coupledValue("temperature")),
-     _D_0_Ni(coupledValue("prefactor-Ni")),
-     _E_A_Ni(coupledValue("activation_energy-Ni")),
-     _D_0_Fe(coupledValue("prefactor-Fe")),
-     _E_A_Fe(coupledValue("activation_energy-Fe")),
+     _D_0_Ni(coupledValue("prefactor_Ni")),
+     _E_A_Ni(coupledValue("activation_energy_Ni")),
+     _D_0_Fe(coupledValue("prefactor_Fe")),
+     _E_A_Fe(coupledValue("activation_energy_Fe")),
 
      // Declare material properties that kernels can use
-     _Ni_diffusivity_matprop(declareProperty<Real>("OxideDiffusivity-Ni")),
-     _Fe_diffusivity_matprop(declareProperty<Real>("OxideDiffusivity-Fe")),
+     _Ni_diffusivity_matprop(declareProperty<Real>("OxideDiffusivity_Ni")),
+     _Fe_diffusivity_matprop(declareProperty<Real>("OxideDiffusivity_Fe")),
      _rho_h2o(declareProperty<Real>("WaterDensity"))
 
 {
