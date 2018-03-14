@@ -35,7 +35,7 @@ OxideThickness::OxideThickness(const InputParameters & parameters)
 Real
 OxideThickness::computeValue()
 {
-
+  
   Real thick = _offset[_qp] + (_prefactor[_qp] * std::pow(_t,_power[_qp]));
   return thick;
 }

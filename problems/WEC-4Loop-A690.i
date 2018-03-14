@@ -138,6 +138,12 @@
     family = MONOMIAL
     initial_condition = 0.1
   [../]
+
+  [./OffsetVar]
+    order = CONSTANT
+    family = MONOMIAL
+    initial_condition = 0.0
+  [../]
 []
 
 [Functions]
@@ -245,13 +251,13 @@
   [./Ni-Diffusivity-Aux]
     type = MaterialRealAux
     variable = Ni-Diffusivity
-    property = OxideDiffusivity-Ni
+    property = OxideDiffusivity_Ni
   [../]
 
   [./Fe-Diffusivity-Aux]
     type = MaterialRealAux
     variable = Fe-Diffusivity
-    property = OxideDiffusivity-Fe
+    property = OxideDiffusivity_Fe
   [../]
 
   [./Ni-Metal-Aux]
@@ -297,6 +303,7 @@
     variable = Oxide-Thickness
     prefactor = Thickness-Prefactor
     power = Thickness-Power
+    offset = OffsetVar
   [../]
 []
 
@@ -357,10 +364,10 @@ active = 'Ni_Soluble_ODE Fe_Soluble_ODE'
     block = 0 
 
     temperature = wall_temp
-    prefactor-Ni = Oxide-Prefactor-Ni
-    activation_energy-Ni = Oxide-Activation-Energy-Ni
-    prefactor-Fe = Oxide-Prefactor-Fe
-    activation_energy-Fe = Oxide-Activation-Energy-Fe
+    prefactor_Ni = Oxide-Prefactor-Ni
+    activation_energy_Ni = Oxide-Activation-Energy-Ni
+    prefactor_Fe = Oxide-Prefactor-Fe
+    activation_energy_Fe = Oxide-Activation-Energy-Fe
   [../]
 []
 
